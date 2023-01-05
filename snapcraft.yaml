@@ -30,8 +30,8 @@ apps:
   #   command: usr/bin/ikos-scan-cc
   # scan-cpp:
   #   command: usr/bin/ikos-scan-c++
-  scan-extract:
-    command: usr/bin/ikos-scan-extract
+  # scan-extract:
+  #   command: usr/bin/ikos-scan-extract
   view:
     command: usr/bin/ikos-view
 
