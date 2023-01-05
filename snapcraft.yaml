@@ -9,53 +9,31 @@ description: |
   and proving the absence of runtime errors in C and C++ programs.
 
 grade: stable
-confinement: strict
+confinement: classic
 
 apps:
   ikos:
     command: usr/bin/ikos
-    plugs:
-      - home
   analyzer:
     command: usr/bin/ikos-analyzer
-    plugs:
-      - home
   config:
     command: usr/bin/ikos-config
-    plugs:
-      - home
   import:
     command: usr/bin/ikos-import
-    plugs:
-      - home
   # pp:
   #   command: usr/bin/ikos-pp
-  #   plugs:
-  #     - home
   report:
     command: usr/bin/ikos-report
-    plugs:
-      - home
   scan:
     command: usr/bin/ikos-scan
-    plugs:
-      - home
   # scan-cc:
   #   command: usr/bin/ikos-scan-cc
-  #   plugs:
-  #     - home
   # scan-cpp:
   #   command: usr/bin/ikos-scan-c++
-  #   plugs:
-  #     - home
   scan-extract:
     command: usr/bin/ikos-scan-extract
-    plugs:
-      - home
   view:
     command: usr/bin/ikos-view
-    plugs:
-      - home
 
 parts:
   ikos:
