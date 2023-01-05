@@ -1,0 +1,84 @@
+name: ikos
+base: core22
+version: "3.1"
+summary:  Static analyzer for C/C++ based on the theory of Abstract Interpretation
+description: |
+  IKOS (Inference Kernel for Open Static Analyzers) is a static analyzer for
+  C/C++ based on the theory of Abstract Interpretation. It provides a C and C++
+  static analyzer based on LLVM. It implements scalable analyses for detecting
+  and proving the absence of runtime errors in C and C++ programs.
+
+grade: stable
+confinement: strict
+
+apps:
+  ikos:
+    command: usr/bin/ikos
+    plugs:
+      - home
+  analyzer:
+    command: usr/bin/ikos-analyzer
+    plugs:
+      - home
+  config:
+    command: usr/bin/ikos-config
+    plugs:
+      - home
+  import:
+    command: usr/bin/ikos-import
+    plugs:
+      - home
+  # pp:
+  #   command: usr/bin/ikos-pp
+  #   plugs:
+  #     - home
+  report:
+    command: usr/bin/ikos-report
+    plugs:
+      - home
+  scan:
+    command: usr/bin/ikos-scan
+    plugs:
+      - home
+  # scan-cc:
+  #   command: usr/bin/ikos-scan-cc
+  #   plugs:
+  #     - home
+  # scan-cpp:
+  #   command: usr/bin/ikos-scan-c++
+  #   plugs:
+  #     - home
+  scan-extract:
+    command: usr/bin/ikos-scan-extract
+    plugs:
+      - home
+  view:
+    command: usr/bin/ikos-view
+    plugs:
+      - home
+
+parts:
+  ikos:
+    plugin: cmake
+    source: https://github.com/NASA-SW-VnV/ikos.git
+    source-tag: v$SNAPCRAFT_PROJECT_VERSION
+    cmake-parameters:
+      - -DCMAKE_INSTALL_PREFIX=/usr
+    build-packages:
+      - clang
+      - llvm
+      - cmake
+      - libgmp-dev
+      - libboost-all-dev
+      - python3
+      - libsqlite3-dev
+      - libtbb-dev
+      - python3-pygments
+    stage-packages:
+      - clang
+      - libgmp10
+      - libsqlite3-0
+      - libtbb12
+      - libboost-filesystem1.74.0
+      - libboost-thread1.74.0
+      - libgmpxx4ldbl
