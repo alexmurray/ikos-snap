@@ -20,18 +20,10 @@ apps:
     command: usr/bin/ikos-config
   import:
     command: usr/bin/ikos-import
-  # pp:
-  #   command: usr/bin/ikos-pp
   report:
     command: usr/bin/ikos-report
   scan:
     command: usr/bin/ikos-scan
-  # scan-cc:
-  #   command: usr/bin/ikos-scan-cc
-  # scan-cpp:
-  #   command: usr/bin/ikos-scan-c++
-  # scan-extract:
-  #   command: usr/bin/ikos-scan-extract
   view:
     command: usr/bin/ikos-view
 
