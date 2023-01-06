@@ -36,7 +36,9 @@ parts:
       - -DCMAKE_INSTALL_PREFIX=/usr
     build-packages:
       - clang
+      - libclang-dev
       - llvm
+      - llvm-dev
       - cmake
       - libgmp-dev
       - libboost-all-dev
@@ -46,9 +48,28 @@ parts:
       - python3-pygments
     stage-packages:
       - clang
+      - libclang-dev
       - libgmp10
       - libsqlite3-0
       - libtbb12
       - libboost-filesystem1.74.0
       - libboost-thread1.74.0
       - libgmpxx4ldbl
+      - llvm
+      - llvm-dev
+    override-pull: |
+      craftctl default
+      # ensure the final code is snap aware
+      sed -i "s|PREFIX = \(.*\)|PREFIX = os.getenv('SNAP', '/snap/ikos/current') + \1|" analyzer/python/ikos/settings.py.in
+      sed -i "s|\(LLVM_CONFIG = .*\)|\1.replace('"$SNAPCRAFT_PART_INSTALL"', os.getenv('SNAP', '/snap/ikos/current'))|" analyzer/python/ikos/settings.py.in
+      sed -i "s|\(LLVM_PREFIX = .*\)|\1.replace('"$SNAPCRAFT_PART_INSTALL"', os.getenv('SNAP', '/snap/ikos/current'))|" analyzer/python/ikos/settings.py.in
+      sed -i "s|\(LLVM_BIN_DIR = .*\)|\1.replace('"$SNAPCRAFT_PART_INSTALL"', os.getenv('SNAP', '/snap/ikos/current'))|" analyzer/python/ikos/settings.py.in
+      sed -i "s|\(LLVM_INCLUDE_DIR = .*\)|\1.replace('"$SNAPCRAFT_PART_INSTALL"', os.getenv('SNAP', '/snap/ikos/current'))|" analyzer/python/ikos/settings.py.in
+      sed -i "s|\(LLVM_LIBRARY_DIR = .*\)|\1.replace('"$SNAPCRAFT_PART_INSTALL"', os.getenv('SNAP', '/snap/ikos/current'))|" analyzer/python/ikos/settings.py.in
+      sed -i "s|\(CLANG = .*\)|\1.replace('"$SNAPCRAFT_PART_INSTALL"', os.getenv('SNAP', '/snap/ikos/current'))|" analyzer/python/ikos/settings.py.in
+      sed -i "s|\(CLANGXX = .*\)|\1.replace('"$SNAPCRAFT_PART_INSTALL"', os.getenv('SNAP', '/snap/ikos/current'))|" analyzer/python/ikos/settings.py.in
+    override-build: |
+      craftctl default
+      # snapcraft won't allow an application with c++ in the binary name so
+      # symlink one as cpp
+      ln -s ikos-scan-c++ $CRAFT_PART_INSTALL/usr/bin/ikos-scan-cpp
