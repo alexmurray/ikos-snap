@@ -10,6 +10,7 @@ description: |
 
 grade: stable
 confinement: classic
+license: NASA-1.3
 
 apps:
   ikos:
