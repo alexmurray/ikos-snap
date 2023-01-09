@@ -93,8 +93,5 @@ parts:
       sed -i "s|itertools.islice(output.splitlines(), 4, None)|itertools.islice(output.splitlines(), 3, None)|" analyzer/python/ikos/scan.py
     override-build: |
       craftctl default
-      # snapcraft won't allow an application with c++ in the binary name so
-      # symlink one as cpp
-      ln -s ikos-scan-c++ $CRAFT_PART_INSTALL/usr/bin/ikos-scan-cpp
       # fixup python interpreter path
       sed -i "s|$CRAFT_PART_INSTALL|/snap/ikos/current|" $CRAFT_PART_INSTALL/usr/bin/ikos*
