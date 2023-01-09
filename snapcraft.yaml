@@ -84,6 +84,12 @@ parts:
       sed -i "s|\(LLVM_LIBRARY_DIR = .*\)|\1.replace('"$SNAPCRAFT_PART_INSTALL"', os.getenv('SNAP', '/snap/ikos/current'))|" analyzer/python/ikos/settings.py.in
       sed -i "s|\(CLANG = .*\)|\1.replace('"$SNAPCRAFT_PART_INSTALL"', os.getenv('SNAP', '/snap/ikos/current'))|" analyzer/python/ikos/settings.py.in
       sed -i "s|\(CLANGXX = .*\)|\1.replace('"$SNAPCRAFT_PART_INSTALL"', os.getenv('SNAP', '/snap/ikos/current'))|" analyzer/python/ikos/settings.py.in
+      # and fix a bug where the wrong flag is passed to llvm-objdump (since
+      # llvm-10 this is now --section not -section)
+      sed -i "s|cmd.append('-section=%s' % ELF_SECTION_NAME)|cmd.append('--section=%s' % ELF_SECTION_NAME)|" analyzer/python/ikos/scan.py
+      # and which parses the output of llvm-objdump incorrectly (the output
+      # format seems to have changed in more recent versions)
+      sed -i "s|itertools.islice(output.splitlines(), 4, None)|itertools.islice(output.splitlines(), 3, None)|" analyzer/python/ikos/scan.py
     override-build: |
       craftctl default
       # snapcraft won't allow an application with c++ in the binary name so
