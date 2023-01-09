@@ -13,19 +13,29 @@ confinement: classic
 
 apps:
   ikos:
-    command: usr/bin/ikos
+    command: usr/bin/python3 $SNAP/usr/bin/ikos
+    environment:
+      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
   analyzer:
     command: usr/bin/ikos-analyzer
   config:
-    command: usr/bin/ikos-config
+    command: usr/bin/python3 $SNAP/usr/bin/ikos-config
+    environment:
+      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
   import:
     command: usr/bin/ikos-import
   report:
-    command: usr/bin/ikos-report
+    command: usr/bin/python3 $SNAP/usr/bin/ikos-report
+    environment:
+      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
   scan:
-    command: usr/bin/ikos-scan
+    command: usr/bin/python3 $SNAP/usr/bin/ikos-scan
+    environment:
+      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
   view:
-    command: usr/bin/ikos-view
+    command: usr/bin/python3 $SNAP/usr/bin/ikos-view
+    environment:
+      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
 
 parts:
   ikos:
@@ -45,18 +55,24 @@ parts:
       - python3
       - libsqlite3-dev
       - libtbb-dev
-      - python3-pygments
     stage-packages:
       - clang
       - libclang-dev
       - libgmp10
       - libsqlite3-0
+      - libsqlite3-dev
       - libtbb12
       - libboost-filesystem1.74.0
       - libboost-thread1.74.0
       - libgmpxx4ldbl
+      - libpython3.10-stdlib
       - llvm
       - llvm-dev
+      - python3
+      - python3-minimal
+      - python3.10
+      - python3.10-minimal
+      - python3-pygments
     override-pull: |
       craftctl default
       # ensure the final code is snap aware
@@ -73,3 +89,5 @@ parts:
       # snapcraft won't allow an application with c++ in the binary name so
       # symlink one as cpp
       ln -s ikos-scan-c++ $CRAFT_PART_INSTALL/usr/bin/ikos-scan-cpp
+      # fixup python interpreter path
+      sed -i "s|$CRAFT_PART_INSTALL|/snap/ikos/current|" $CRAFT_PART_INSTALL/usr/bin/ikos*
