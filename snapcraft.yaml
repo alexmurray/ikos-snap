@@ -16,27 +16,27 @@ apps:
   ikos:
     command: usr/bin/python3 $SNAP/usr/bin/ikos
     environment:
-      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
+      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/local/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
   analyzer:
     command: usr/bin/ikos-analyzer
   config:
     command: usr/bin/python3 $SNAP/usr/bin/ikos-config
     environment:
-      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
+      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/local/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
   import:
     command: usr/bin/ikos-import
   report:
     command: usr/bin/python3 $SNAP/usr/bin/ikos-report
     environment:
-      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
+      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/local/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
   scan:
     command: usr/bin/python3 $SNAP/usr/bin/ikos-scan
     environment:
-      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
+      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/local/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
   view:
     command: usr/bin/python3 $SNAP/usr/bin/ikos-view
     environment:
-      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
+      PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/local/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
 
 parts:
   ikos:
@@ -45,6 +45,8 @@ parts:
     source-tag: v$SNAPCRAFT_PROJECT_VERSION
     cmake-parameters:
       - -DCMAKE_INSTALL_PREFIX=/usr
+      - -DINSTALL_PYTHON_VIRTUALENV=OFF
+      - -DPYTHON_VENV_EXECUTABLE=$SNAPCRAFT_PART_INSTALL/usr/bin/python3
     build-packages:
       - clang
       - libclang-dev
@@ -53,7 +55,16 @@ parts:
       - cmake
       - libgmp-dev
       - libboost-all-dev
+      - libpython3.10-minimal
+      - libpython3.10-stdlib
       - python3
+      - python3-minimal
+      - python3.10
+      - python3.10-minimal
+      - python3-pip
+      - python3-setuptools
+      - python3-venv
+      - python3.10-venv
       - libsqlite3-dev
       - libtbb-dev
     stage-packages:
@@ -66,14 +77,19 @@ parts:
       - libboost-filesystem1.74.0
       - libboost-thread1.74.0
       - libgmpxx4ldbl
+      - libpython3.10-minimal
       - libpython3.10-stdlib
       - llvm
       - llvm-dev
       - python3
+      - python3-distutils
       - python3-minimal
       - python3.10
       - python3.10-minimal
+      - python3-pkg-resources
+      - python3-pip
       - python3-pygments
+      - python3-setuptools
     override-pull: |
       craftctl default
       # ensure the final code is snap aware
@@ -95,3 +111,6 @@ parts:
       craftctl default
       # fixup python interpreter path
       sed -i "s|$CRAFT_PART_INSTALL|/snap/ikos/current|" $CRAFT_PART_INSTALL/usr/bin/ikos*
+      cd analyzer/python
+      $SNAPCRAFT_PART_INSTALL/usr/bin/python3 -m pip install .
+      test -f $SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.10/dist-packages/ikos/__init__.py
