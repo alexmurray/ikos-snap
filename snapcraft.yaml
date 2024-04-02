@@ -1,6 +1,6 @@
 name: ikos
 base: core22
-version: "3.2"
+version: "3.3"
 summary:  Static analyzer for C/C++ based on the theory of Abstract Interpretation
 description: |
   IKOS (Inference Kernel for Open Static Analyzers) is a static analyzer for
