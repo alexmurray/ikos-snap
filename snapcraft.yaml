@@ -1,6 +1,6 @@
 name: ikos
 base: core22
-version: "3.4"
+version: "3.5"
 summary:  Static analyzer for C/C++ based on the theory of Abstract Interpretation
 description: |
   IKOS (Inference Kernel for Open Static Analyzers) is a static analyzer for
@@ -18,6 +18,8 @@ apps:
     environment:
       PYTHONPATH: $SNAP/usr/lib/python3.10:$SNAP/usr/local/lib/python3/dist-packages:$SNAP/usr/lib/python3.10/site-packages
   analyzer:
+    command-chain:
+      - setup-env
     command: usr/bin/ikos-analyzer
   config:
     command: usr/bin/python3 $SNAP/usr/bin/ikos-config
@@ -114,3 +116,8 @@ parts:
       cd analyzer/python
       $SNAPCRAFT_PART_INSTALL/usr/bin/python3 -m pip install .
       test -f $SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.10/dist-packages/ikos/__init__.py
+  command-chain:
+    source: .
+    plugin: dump
+    stage:
+      - setup-env
