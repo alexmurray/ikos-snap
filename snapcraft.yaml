@@ -20,7 +20,6 @@ apps:
   analyzer:
     command: usr/bin/ikos-analyzer
     environment:
-      LD_LIBRARY_PATH: $SNAP/usr/lib/$CRAFT_ARCH_TRIPLET
   config:
     command: usr/bin/python3 $SNAP/usr/bin/ikos-config
     environment:
@@ -116,3 +115,5 @@ parts:
       cd analyzer/python
       $SNAPCRAFT_PART_INSTALL/usr/bin/python3 -m pip install .
       test -f $SNAPCRAFT_PART_INSTALL/usr/local/lib/python3.10/dist-packages/ikos/__init__.py
+    build-attributes:
+      - enable-patchelf
